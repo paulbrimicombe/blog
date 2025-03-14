@@ -1,0 +1,81 @@
+@use "reset";
+
+$backgroundColor: #ffffff;
+$bodyColor: #000000;
+$bodyFont: Merriweather, MerriweatherFallback, Arial, sans-serif,
+  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+@font-face {
+  font-family: "MerriweatherFallback";
+  src: local("Arial");
+  size-adjust: 109%;
+  ascent-override: 89%;
+  descent-override: 26%;
+  line-gap-override: 0%;
+}
+
+body {
+  background: $backgroundColor;
+  color: $bodyColor;
+  font-family: $bodyFont;
+  max-width: 60em;
+  margin: 0 auto;
+  font-size: 1.1em;
+}
+
+main {
+  padding: 0 0 2em 0;
+  max-width: 60em;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.8;
+  gap: 1em;
+}
+
+a {
+  color: MediumBlue;
+}
+
+a:hover {
+  background-color: bisque;
+}
+
+a:visited {
+  color: MediumBlue;
+}
+
+a[target="_blank"]::after {
+  content: "↗";
+  font-family: Arial;
+}
+
+nav {
+  padding-bottom: 0.2em;
+}
+
+nav a {
+  color: black;
+  text-decoration: none;
+}
+
+nav a:visited {
+  color: black;
+}
+
+nav a:hover {
+  text-decoration: underline;
+  background-color: bisque;
+}
+
+nav > ul {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  padding: 0;
+  border-bottom: 2px solid #0009;
+}
+
+nav > ul li {
+  list-style-type: none;
+  padding: 0.8em 1em;
+}

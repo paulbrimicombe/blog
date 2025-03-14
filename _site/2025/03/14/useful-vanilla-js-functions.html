@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Some useful Vanilla JS functions - A blog post that describes some useful Vanilla JavaScript functions for use when developing websites">
+    <meta charset="utf-8">
+    <title>Some useful Vanilla JS functions - Yet Another Tech. Blog (YATB)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+Symbols+2&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/blog/assets/css/main.css">
+    <link rel="stylesheet" href="/blog/assets/css/post.css">
+  </head>
+  <body>
+    <nav>
+  <ul>
+    <a href="/blog/"><li>YAT.B</li></a>
+    <a href="/blog/about"><li>about</li></a>
+  </ul>
+</nav>
+
+    <main>
+    <h1 id="some-useful-vanilla-js-functions">Some useful Vanilla JS functions</h1>
+
+<p>I quite often find myself writing the same few utility functions when building a Vanilla JavaScript website and so I thought I’d share them with the world.</p>
+
+<p>My normal project setup involves:</p>
+
+<ul>
+  <li>using <code class="language-plaintext highlighter-rouge">// @ts-check</code> at the start of my JavaScript source files to get code hints and type checking from the editor;</li>
+  <li>adding <a href="https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html" target="_blank" referrer-policy="none">JSDoc</a> comments to functions so the editor can check type safety;</li>
+  <li>a static HTML file that imports my JavaScript source file and includes one or more elements that are required by the JavaScript file.</li>
+</ul>
+
+<h2 id="finding-elements-on-the-page">Finding elements on the page</h2>
+
+<p>The first utility function gets an element by ID and checks its type:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Fetch an element from the page
+ * @template {HTMLElement} T
+ * @param {string} id ID of the element to be found.
+ * @param {new () =&gt; T} type the expected type of the element.
+ * @returns {T} the required element.
+ */</span>
+<span class="kd">const</span> <span class="nx">getElementAs</span> <span class="o">=</span> <span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">type</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">element</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+  <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">element</span> <span class="k">instanceof</span> <span class="nx">type</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nc">Error</span><span class="p">(</span><span class="s2">`Expected element </span><span class="p">${</span><span class="nx">id</span><span class="p">}</span><span class="s2"> to have type </span><span class="p">${</span><span class="nx">type</span><span class="p">}</span><span class="s2">: </span><span class="p">${</span><span class="nx">element</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">element</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>If you don’t care what the type is, only that it exists, you can pass <code class="language-plaintext highlighter-rouge">HTMLElement</code>. Here’s an example that finds a form by ID and ensures it has the correct type:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">myForm</span> <span class="o">=</span> <span class="nf">getElementAs</span><span class="p">(</span><span class="dl">"</span><span class="s2">my-form</span><span class="dl">"</span><span class="p">,</span> <span class="nx">HTMLFormElement</span><span class="p">);</span>
+
+<span class="nx">myForm</span><span class="p">.</span><span class="nf">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">submit</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">event</span><span class="p">.</span><span class="nf">preventDefault</span><span class="p">();</span>
+
+  <span class="c1">// Since the editor now knows that myForm is an HTMLFormElement</span>
+  <span class="c1">// it can be used to create FormData without any warnings.</span>
+  <span class="kd">const</span> <span class="nx">formData</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FormData</span><span class="p">(</span><span class="nx">myForm</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h2 id="creating-new-elements">Creating new elements</h2>
+
+<p>I often find myself needing to construct new HTML elements in JavaScript to dynamically update the page contents. This can be a somewhat tedious process involving:</p>
+
+<ul>
+  <li>using <code class="language-plaintext highlighter-rouge">document.createElement('div')</code> to create elements;</li>
+  <li>setting / adding various properties on the element returned (e.g. appending to the <code class="language-plaintext highlighter-rouge">classList</code>, setting <code class="language-plaintext highlighter-rouge">dataset</code> properties etc);</li>
+  <li>using <code class="language-plaintext highlighter-rouge">parent.appendElement(someElement)</code> calls to add the new elements to the page.</li>
+</ul>
+
+<p>This can get pretty verbose and it’s hard to keep track of which elements are being created and which parents they are being added to. Here’s an example that creates a <code class="language-plaintext highlighter-rouge">div</code> and a <code class="language-plaintext highlighter-rouge">span</code> and sets some class names etc:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">parent</span> <span class="o">=</span> <span class="nf">getElementAs</span><span class="p">(</span><span class="dl">"</span><span class="s2">my-container</span><span class="dl">"</span><span class="p">,</span> <span class="nx">HTMLElement</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">cardDiv</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">createElement</span><span class="p">(</span><span class="dl">"</span><span class="s2">div</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">parent</span><span class="p">.</span><span class="nf">appendChild</span><span class="p">(</span><span class="nx">cardDiv</span><span class="p">);</span>
+
+<span class="nx">cardDiv</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="dl">"</span><span class="s2">card</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">cardDiv</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">suit</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">spades</span><span class="dl">"</span><span class="p">;</span>
+<span class="nx">cardDiv</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">9</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">cardValueSpan</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">createElement</span><span class="p">(</span><span class="dl">"</span><span class="s2">span</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">cardValueSpan</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">9</span><span class="dl">"</span><span class="p">;</span>
+<span class="nx">cardDiv</span><span class="p">.</span><span class="nf">appendChild</span><span class="p">(</span><span class="nx">cardValueSpan</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Instead, I use a factory function like this to do all of the creation steps in a single function call:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Creates a new element of type `type` and appends it as a child to element `parent`.
+ *
+ * @template {keyof HTMLElementTagNameMap} T
+ * @param {HTMLElement} parent the parent HTML element.
+ * @param {T} type the type of HTML Element to be created.
+ * @param {Partial&lt;Omit&lt;HTMLElementTagNameMap[T], 'classList'&gt;&gt; &amp; {
+ *   classList?: string[]
+ * }=} properties any properties to be set on the element.
+ * @returns {HTMLElementTagNameMap[T]} the newly created element
+ */</span>
+<span class="kd">const</span> <span class="nx">appendNewChild</span> <span class="o">=</span> <span class="p">(</span><span class="nx">parent</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">properties</span> <span class="o">=</span> <span class="p">{})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// Create the new element</span>
+  <span class="kd">const</span> <span class="nx">newElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">createElement</span><span class="p">(</span><span class="nx">type</span><span class="p">);</span>
+
+  <span class="c1">// Set the properties of the new element</span>
+  <span class="k">for </span><span class="p">(</span><span class="kd">const</span> <span class="p">[</span><span class="nx">property</span><span class="p">,</span> <span class="nx">value</span><span class="p">]</span> <span class="k">of</span> <span class="nb">Object</span><span class="p">.</span><span class="nf">entries</span><span class="p">(</span><span class="nx">properties</span> <span class="o">??</span> <span class="p">{}))</span> <span class="p">{</span>
+    <span class="c1">// classList is a special case since you can't (officially) set it directly</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">property</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">classList</span><span class="dl">"</span> <span class="o">&amp;&amp;</span> <span class="nb">Array</span><span class="p">.</span><span class="nf">isArray</span><span class="p">(</span><span class="nx">value</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">for </span><span class="p">(</span><span class="kd">const</span> <span class="nx">className</span> <span class="k">of</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">newElement</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="nx">className</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="c1">// dataset is another special case...</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if </span><span class="p">(</span><span class="nx">property</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">dataset</span><span class="dl">"</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">object</span><span class="dl">"</span> <span class="o">&amp;&amp;</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">for </span><span class="p">(</span><span class="kd">const</span> <span class="p">[</span><span class="nx">datasetKey</span><span class="p">,</span> <span class="nx">datasetValue</span><span class="p">]</span> <span class="k">of</span> <span class="nb">Object</span><span class="p">.</span><span class="nf">entries</span><span class="p">(</span><span class="nx">value</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">newElement</span><span class="p">.</span><span class="nx">dataset</span><span class="p">[</span><span class="nx">datasetKey</span><span class="p">]</span> <span class="o">=</span> <span class="nx">datasetValue</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="c1">// More "normal" properties can just be set directly</span>
+      <span class="nx">newElement</span><span class="p">[</span><span class="nx">property</span><span class="p">]</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Append the child element to the parent</span>
+  <span class="nx">parent</span><span class="p">.</span><span class="nf">appendChild</span><span class="p">(</span><span class="nx">newElement</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">newElement</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>Here’s the same example using this factory function – I find this much easier to read as it’s more declarative (but everyone’s tastes are different!). Because the editor can infer the type of element you are creating you can get editor hints for the available properties and the values are type checked as you write the code:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">parent</span> <span class="o">=</span> <span class="nf">getElementAs</span><span class="p">(</span><span class="dl">"</span><span class="s2">my-container</span><span class="dl">"</span><span class="p">,</span> <span class="nx">HTMLElement</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">cardDiv</span> <span class="o">=</span> <span class="nf">appendNewChild</span><span class="p">(</span><span class="dl">"</span><span class="s2">div</span><span class="dl">"</span><span class="p">,</span> <span class="nx">parent</span><span class="p">,</span> <span class="p">{</span>
+  <span class="na">classList</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">card</span><span class="dl">"</span><span class="p">],</span>
+  <span class="na">dataset</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">suit</span><span class="p">:</span> <span class="dl">"</span><span class="s2">spades</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">value</span><span class="p">:</span> <span class="dl">"</span><span class="s2">9</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">},</span>
+<span class="p">});</span>
+
+<span class="nf">appendNewChild</span><span class="p">(</span><span class="dl">"</span><span class="s2">span</span><span class="dl">"</span><span class="p">,</span> <span class="nx">cardDiv</span><span class="p">,</span> <span class="p">{</span>
+  <span class="na">textContent</span><span class="p">:</span> <span class="dl">"</span><span class="s2">9</span><span class="dl">"</span><span class="p">,</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>I hope that you find these helper functions useful. I’ll probably come back and add some more / update them as I come across new things I find handy…</p>
+
+    </main>
+  </body>
+</html>
