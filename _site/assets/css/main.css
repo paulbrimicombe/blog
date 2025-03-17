@@ -57,17 +57,31 @@ h6 {
   descent-override: 26%;
   line-gap-override: 0%;
 }
+html {
+  --fs-base: clamp(1rem, 0.34vi + 0.91rem, 1.19rem);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.2;
+}
+
 body {
   background: #ffffff;
   color: #000000;
   font-family: Merriweather, MerriweatherFallback, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   max-width: 60em;
   margin: 0 auto;
-  font-size: 1.1em;
+  font-size: var(--fs-base);
 }
 
 main {
-  padding: 0 0 2em 0;
+  padding: 1em;
+  padding-bottom: 2em;
   max-width: 60em;
   display: flex;
   flex-direction: column;
@@ -121,6 +135,12 @@ nav > ul {
 nav > ul li {
   list-style-type: none;
   padding: 0.8em 1em;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
 }
 
 /*# sourceMappingURL=main.css.map */

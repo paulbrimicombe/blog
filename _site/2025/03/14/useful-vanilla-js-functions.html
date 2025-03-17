@@ -22,21 +22,27 @@
     <main>
     <h1 id="some-useful-vanilla-js-functions">Some useful Vanilla JS functions</h1>
 
-<p>I quite often find myself writing the same few utility functions when building a Vanilla JavaScript website and so I thought I’d share them with the world.</p>
+<section>
 
-<p>My normal project setup involves:</p>
+  <p>I quite often find myself writing the same few utility functions when building a Vanilla JavaScript website and so I thought I’d share them with the world.</p>
 
-<ul>
-  <li>using <code class="language-plaintext highlighter-rouge">// @ts-check</code> at the start of my JavaScript source files to get code hints and type checking from the editor;</li>
-  <li>adding <a href="https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html" target="_blank" referrer-policy="none">JSDoc</a> comments to functions so the editor can check type safety;</li>
-  <li>a static HTML file that imports my JavaScript source file and includes one or more elements that are required by the JavaScript file.</li>
-</ul>
+  <p>My normal project setup involves:</p>
 
-<h2 id="finding-elements-on-the-page">Finding elements on the page</h2>
+  <ul>
+    <li>using <code class="language-plaintext highlighter-rouge">// @ts-check</code> at the start of my JavaScript source files to get code hints and type checking from the editor;</li>
+    <li>adding <a href="https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html" target="_blank" referrer-policy="none">JSDoc</a> comments to functions so the editor can check type safety;</li>
+    <li>a static HTML file that imports my JavaScript source file and includes one or more elements that are required by the JavaScript file.</li>
+  </ul>
 
-<p>The first utility function gets an element by ID and checks its type:</p>
+</section>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+<section>
+
+  <h2 id="finding-elements-on-the-page">Finding elements on the page</h2>
+
+  <p>The first utility function gets an element by ID and checks its type:</p>
+
+  <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
  * Fetch an element from the page
  * @template {HTMLElement} T
  * @param {string} id ID of the element to be found.
@@ -50,11 +56,11 @@
   <span class="p">}</span>
   <span class="k">return</span> <span class="nx">element</span><span class="p">;</span>
 <span class="p">};</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>If you don’t care what the type is, only that it exists, you can pass <code class="language-plaintext highlighter-rouge">HTMLElement</code>. Here’s an example that finds a form by ID and ensures it has the correct type:</p>
+  <p>If you don’t care what the type is, only that it exists, you can pass <code class="language-plaintext highlighter-rouge">HTMLElement</code>. Here’s an example that finds a form by ID and ensures it has the correct type:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">myForm</span> <span class="o">=</span> <span class="nf">getElementAs</span><span class="p">(</span><span class="dl">"</span><span class="s2">my-form</span><span class="dl">"</span><span class="p">,</span> <span class="nx">HTMLFormElement</span><span class="p">);</span>
+  <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">myForm</span> <span class="o">=</span> <span class="nf">getElementAs</span><span class="p">(</span><span class="dl">"</span><span class="s2">my-form</span><span class="dl">"</span><span class="p">,</span> <span class="nx">HTMLFormElement</span><span class="p">);</span>
 
 <span class="nx">myForm</span><span class="p">.</span><span class="nf">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">submit</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="nx">event</span><span class="p">.</span><span class="nf">preventDefault</span><span class="p">();</span>
@@ -63,21 +69,24 @@
   <span class="c1">// it can be used to create FormData without any warnings.</span>
   <span class="kd">const</span> <span class="nx">formData</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FormData</span><span class="p">(</span><span class="nx">myForm</span><span class="p">);</span>
 <span class="p">});</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
+</section>
 
-<h2 id="creating-new-elements">Creating new elements</h2>
+<section>
 
-<p>I often find myself needing to construct new HTML elements in JavaScript to dynamically update the page contents. This can be a somewhat tedious process involving:</p>
+  <h2 id="creating-new-elements">Creating new elements</h2>
 
-<ul>
-  <li>using <code class="language-plaintext highlighter-rouge">document.createElement('div')</code> to create elements;</li>
-  <li>setting / adding various properties on the element returned (e.g. appending to the <code class="language-plaintext highlighter-rouge">classList</code>, setting <code class="language-plaintext highlighter-rouge">dataset</code> properties etc);</li>
-  <li>using <code class="language-plaintext highlighter-rouge">parent.appendElement(someElement)</code> calls to add the new elements to the page.</li>
-</ul>
+  <p>I often find myself needing to construct new HTML elements in JavaScript to dynamically update the page contents. This can be a somewhat tedious process involving:</p>
 
-<p>This can get pretty verbose and it’s hard to keep track of which elements are being created and which parents they are being added to. Here’s an example that creates a <code class="language-plaintext highlighter-rouge">div</code> and a <code class="language-plaintext highlighter-rouge">span</code> and sets some class names etc:</p>
+  <ul>
+    <li>using <code class="language-plaintext highlighter-rouge">document.createElement('div')</code> to create elements;</li>
+    <li>setting / adding various properties on the element returned (e.g. appending to the <code class="language-plaintext highlighter-rouge">classList</code>, setting <code class="language-plaintext highlighter-rouge">dataset</code> properties etc);</li>
+    <li>using <code class="language-plaintext highlighter-rouge">parent.appendElement(someElement)</code> calls to add the new elements to the page.</li>
+  </ul>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">parent</span> <span class="o">=</span> <span class="nf">getElementAs</span><span class="p">(</span><span class="dl">"</span><span class="s2">my-container</span><span class="dl">"</span><span class="p">,</span> <span class="nx">HTMLElement</span><span class="p">);</span>
+  <p>This can get pretty verbose and it’s hard to keep track of which elements are being created and which parents they are being added to. Here’s an example that creates a <code class="language-plaintext highlighter-rouge">div</code> and a <code class="language-plaintext highlighter-rouge">span</code> and sets some class names etc:</p>
+
+  <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">parent</span> <span class="o">=</span> <span class="nf">getElementAs</span><span class="p">(</span><span class="dl">"</span><span class="s2">my-container</span><span class="dl">"</span><span class="p">,</span> <span class="nx">HTMLElement</span><span class="p">);</span>
 <span class="kd">const</span> <span class="nx">cardDiv</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">createElement</span><span class="p">(</span><span class="dl">"</span><span class="s2">div</span><span class="dl">"</span><span class="p">);</span>
 <span class="nx">parent</span><span class="p">.</span><span class="nf">appendChild</span><span class="p">(</span><span class="nx">cardDiv</span><span class="p">);</span>
 
@@ -88,11 +97,11 @@
 <span class="kd">const</span> <span class="nx">cardValueSpan</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">createElement</span><span class="p">(</span><span class="dl">"</span><span class="s2">span</span><span class="dl">"</span><span class="p">);</span>
 <span class="nx">cardValueSpan</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">9</span><span class="dl">"</span><span class="p">;</span>
 <span class="nx">cardDiv</span><span class="p">.</span><span class="nf">appendChild</span><span class="p">(</span><span class="nx">cardValueSpan</span><span class="p">);</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>Instead, I use a factory function like this to do all of the creation steps in a single function call:</p>
+  <p>Instead, I use a factory function like this to do all of the creation steps in a single function call:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+  <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
  * Creates a new element of type `type` and appends it as a child to element `parent`.
  *
  * @template {keyof HTMLElementTagNameMap} T
@@ -129,11 +138,11 @@
   <span class="nx">parent</span><span class="p">.</span><span class="nf">appendChild</span><span class="p">(</span><span class="nx">newElement</span><span class="p">);</span>
   <span class="k">return</span> <span class="nx">newElement</span><span class="p">;</span>
 <span class="p">};</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>Here’s the same example using this factory function – I find this much easier to read as it’s more declarative (but everyone’s tastes are different!). Because the editor can infer the type of element you are creating you can get editor hints for the available properties and the values are type checked as you write the code:</p>
+  <p>Here’s the same example using this factory function – I find this much easier to read as it’s more declarative (but everyone’s tastes are different!). Because the editor can infer the type of element you are creating you can get editor hints for the available properties and the values are type checked as you write the code:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">parent</span> <span class="o">=</span> <span class="nf">getElementAs</span><span class="p">(</span><span class="dl">"</span><span class="s2">my-container</span><span class="dl">"</span><span class="p">,</span> <span class="nx">HTMLElement</span><span class="p">);</span>
+  <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">parent</span> <span class="o">=</span> <span class="nf">getElementAs</span><span class="p">(</span><span class="dl">"</span><span class="s2">my-container</span><span class="dl">"</span><span class="p">,</span> <span class="nx">HTMLElement</span><span class="p">);</span>
 
 <span class="kd">const</span> <span class="nx">cardDiv</span> <span class="o">=</span> <span class="nf">appendNewChild</span><span class="p">(</span><span class="dl">"</span><span class="s2">div</span><span class="dl">"</span><span class="p">,</span> <span class="nx">parent</span><span class="p">,</span> <span class="p">{</span>
   <span class="na">classList</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">card</span><span class="dl">"</span><span class="p">],</span>
@@ -146,9 +155,11 @@
 <span class="nf">appendNewChild</span><span class="p">(</span><span class="dl">"</span><span class="s2">span</span><span class="dl">"</span><span class="p">,</span> <span class="nx">cardDiv</span><span class="p">,</span> <span class="p">{</span>
   <span class="na">textContent</span><span class="p">:</span> <span class="dl">"</span><span class="s2">9</span><span class="dl">"</span><span class="p">,</span>
 <span class="p">});</span>
-</code></pre></div></div>
+</code></pre></div>  </div>
 
-<p>I hope that you find these helper functions useful. I’ll probably come back and add some more / update them as I come across new things I find handy…</p>
+  <p>I hope that you find these helper functions useful. I’ll probably come back and add some more / update them as I come across new things I find handy…</p>
+
+</section>
 
     </main>
   </body>

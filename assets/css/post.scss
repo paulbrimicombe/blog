@@ -3,10 +3,14 @@
 
 @import "sass-code-highlight/monokai";
 
+main { 
+  gap: 1em;
+}
+
 code {
   padding: 0.2em 0.3em;
   border-radius: 0.2em;
-  font-size: 1.1em;
+  font-size: var(--fs-base);
   background-color: lightgrey;
   color: black;
 }
@@ -15,6 +19,7 @@ code {
   padding: 0.5em;
   border-radius: 0.5em;
   margin: 0 0.5em;
+  overflow-x: scroll;
 }
 
 pre > code {

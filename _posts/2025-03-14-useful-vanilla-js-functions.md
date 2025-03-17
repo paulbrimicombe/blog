@@ -6,6 +6,8 @@ description: "A blog post that describes some useful Vanilla JavaScript function
 
 # Some useful Vanilla JS functions
 
+<section markdown="1">
+
 I quite often find myself writing the same few utility functions when building a Vanilla JavaScript website and so I thought I'd share them with the world.
 
 My normal project setup involves:
@@ -13,6 +15,10 @@ My normal project setup involves:
 - using `// @ts-check` at the start of my JavaScript source files to get code hints and type checking from the editor;
 - adding <a href="https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html" target="_blank" referrer-policy="none">JSDoc</a> comments to functions so the editor can check type safety;
 - a static HTML file that imports my JavaScript source file and includes one or more elements that are required by the JavaScript file.
+
+</section>
+
+<section markdown="1">
 
 ## Finding elements on the page
 
@@ -48,6 +54,9 @@ myForm.addEventListener("submit", (event) => {
   const formData = new FormData(myForm);
 });
 ```
+</section>
+
+<section markdown="1">
 
 ## Creating new elements
 
@@ -134,3 +143,5 @@ appendNewChild("span", cardDiv, {
 ```
 
 I hope that you find these helper functions useful. I'll probably come back and add some more / update them as I come across new things I find handy...
+
+</section>
